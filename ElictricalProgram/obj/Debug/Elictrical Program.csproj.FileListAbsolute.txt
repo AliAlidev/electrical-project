@@ -1,0 +1,17 @@
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\bin\Debug\Elictrical Program.exe.config
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\bin\Debug\Elictrical Program.exe
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\bin\Debug\Elictrical Program.pdb
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical Program.csproj.SuggestedBindingRedirects.cache
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical_Program.Form1.resources
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical_Program.Properties.Resources.resources
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical Program.csproj.GenerateResource.cache
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical Program.csproj.CoreCompileInputs.cache
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical Program.exe
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical Program.pdb
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical Program.csproj.ResolveComReference.cache
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\bin\Debug\GemBox.Spreadsheet.dll
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\bin\Debug\BouncyCastle.Crypto.xml
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\bin\Debug\GemBox.Spreadsheet.xml
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical Program.csproj.CopyComplete
+C:\Users\Ali\source\repos\Elictrical Program\Elictrical Program\obj\Debug\Elictrical Program.csproj.AssemblyReference.cache
