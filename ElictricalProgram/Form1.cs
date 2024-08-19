@@ -30,7 +30,7 @@ namespace Elictrical_Program
             string file_name = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
             string fileToCopy = Application.StartupPath + "\\db";
             string destinationFile = Application.StartupPath + "\\backups\\" + file_name + ".back";
-            if(!File.Exists(destinationFile))
+            if (!File.Exists(destinationFile))
                 File.Copy(fileToCopy, destinationFile);
         }
 
@@ -95,6 +95,15 @@ namespace Elictrical_Program
             // fill table with empty rows
             fillTableEmptyRows(readingTable, 25);
 
+            // get last reading data
+            string[] lastReadingData = getLastReadingData();
+
+            // fill table with previous records
+            fillTableWithCurrentDateData(lastReadingData);
+
+            // fill from inputs with previous data
+            setInitialValuesForStartInputs(lastReadingData);
+
             //////////////////
             originalFormSize = new Rectangle(this.Location.X, this.Location.Y, this.Size.Width, this.Size.Height);
             for (int i = 0; i < this.Controls.Count; i++)
@@ -113,6 +122,305 @@ namespace Elictrical_Program
             label4.Text = DBFunctions.user_name;
 
         program_end:;
+        }
+
+        string[] getLastReadingData()
+        {
+            DateTime today = DateTime.Today;
+            string current_date = today.ToString("yyyy-MM-dd");
+            string qrt = "select top 1 * from Readings where working_date='" + current_date + "' AND banias1_send <> '0' " +
+                " AND banias1_send <> '0' AND banias1_receive <> '0'" +
+                " AND banias2_send <> '0' AND banias2_receive <> '0'" +
+                " AND semerian1_send <> '0' AND semerian1_receive <> '0'" +
+                " AND semerian2_send <> '0' AND semerian2_receive <> '0'" +
+                " AND arrival1_send <> '0'" +
+                " AND arrival2_send <> '0'" +
+                " AND arrival3_send <> '0'" +
+                " AND amreet_send <> '0'" +
+                " AND esmant_send <> '0'" +
+                " AND company_send <> '0'" +
+                " AND transformer1_send <> '0'" +
+                " AND transformer2_send <> '0'" +
+                " AND transformer3_send <> '0'" +
+                " AND north_send <> '0'" +
+                " order by id desc";
+            DataSet ds = DBFunctions.fillDataSet(qrt);
+            int items_count = ds.Tables[0].Rows[0].ItemArray.Count();
+            string[] readingData = new string[0];
+            if (items_count > 0)
+            {
+                readingData = new string[items_count];
+                int counter = 0;
+                foreach (var item in ds.Tables[0].Rows[0].ItemArray)
+                {
+                    readingData[counter] = item.ToString();
+                    counter++;
+                }
+            }
+            return readingData;
+        }
+
+        void fillTableWithCurrentDateData(string[] lastReadingData)
+        {
+            DateTime today = DateTime.Today;
+            string current_date = today.ToString("yyyy-MM-dd");
+            int except_hour = 0;
+            if (lastReadingData.Count() > 0)
+            {
+                except_hour = int.Parse(lastReadingData[2]);
+            }
+
+            string qrt = "select * from Readings where working_date='" + current_date + "' order by val(working_hour)";
+
+            DataSet ds = DBFunctions.fillDataSet(qrt);
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                if (except_hour > 0 && i < except_hour)
+                {
+                    for (int j = 0; j < 61; j++)
+                    {
+                        int temp;
+                        int.TryParse(ds.Tables[0].Rows[i].ItemArray[j + 2].ToString(), out temp);
+                        dataGridView1[j, i].Value = temp;
+                    }
+                }
+            }
+        }
+
+        void setInitialValuesForStartInputs(string[] lastReadingData)
+        {
+            if (lastReadingData.Count() > 0)
+            {
+                numericUpDown1.Value = int.Parse(lastReadingData[2]);
+                TextBox line = (TextBox)this.Controls.Find("line01old", true).First();
+                line.Text = lastReadingData[3];
+                line = (TextBox)this.Controls.Find("line02old", true).First();
+                line.Text = lastReadingData[4];
+                line = (TextBox)this.Controls.Find("line03old", true).First();
+                line.Text = lastReadingData[5];
+                line = (TextBox)this.Controls.Find("line04old", true).First();
+                line.Text = lastReadingData[6];
+                line = (TextBox)this.Controls.Find("line11old", true).First();
+                line.Text = lastReadingData[7];
+                line = (TextBox)this.Controls.Find("line12old", true).First();
+                line.Text = lastReadingData[8];
+                line = (TextBox)this.Controls.Find("line13old", true).First();
+                line.Text = lastReadingData[9];
+                line = (TextBox)this.Controls.Find("line14old", true).First();
+                line.Text = lastReadingData[10];
+                line = (TextBox)this.Controls.Find("line21old", true).First();
+                line.Text = lastReadingData[11];
+                line = (TextBox)this.Controls.Find("line22old", true).First();
+                line.Text = lastReadingData[12];
+                line = (TextBox)this.Controls.Find("line23old", true).First();
+                line.Text = lastReadingData[13];
+                line = (TextBox)this.Controls.Find("line24old", true).First();
+                line.Text = lastReadingData[14];
+                line = (TextBox)this.Controls.Find("line31old", true).First();
+                line.Text = lastReadingData[15];
+                line = (TextBox)this.Controls.Find("line32old", true).First();
+                line.Text = lastReadingData[16];
+                line = (TextBox)this.Controls.Find("line33old", true).First();
+                line.Text = lastReadingData[17];
+                line = (TextBox)this.Controls.Find("line34old", true).First();
+                line.Text = lastReadingData[18];
+                line = (TextBox)this.Controls.Find("line41old", true).First();
+                line.Text = lastReadingData[19];
+                line = (TextBox)this.Controls.Find("line42old", true).First();
+                line.Text = lastReadingData[20];
+                line = (TextBox)this.Controls.Find("line43old", true).First();
+                line.Text = lastReadingData[21];
+                line = (TextBox)this.Controls.Find("line44old", true).First();
+                line.Text = lastReadingData[22];
+                line = (TextBox)this.Controls.Find("line51old", true).First();
+                line.Text = lastReadingData[23];
+                line = (TextBox)this.Controls.Find("line52old", true).First();
+                line.Text = lastReadingData[24];
+                line = (TextBox)this.Controls.Find("line53old", true).First();
+                line.Text = lastReadingData[25];
+                line = (TextBox)this.Controls.Find("line54old", true).First();
+                line.Text = lastReadingData[26];
+                line = (TextBox)this.Controls.Find("line61old", true).First();
+                line.Text = lastReadingData[27];
+                line = (TextBox)this.Controls.Find("line62old", true).First();
+                line.Text = lastReadingData[28];
+                line = (TextBox)this.Controls.Find("line63old", true).First();
+                line.Text = lastReadingData[29];
+                line = (TextBox)this.Controls.Find("line64old", true).First();
+                line.Text = lastReadingData[30];
+                line = (TextBox)this.Controls.Find("line71old", true).First();
+                line.Text = lastReadingData[31];
+                line = (TextBox)this.Controls.Find("line72old", true).First();
+                line.Text = lastReadingData[32];
+                line = (TextBox)this.Controls.Find("line73old", true).First();
+                line.Text = lastReadingData[33];
+                line = (TextBox)this.Controls.Find("line74old", true).First();
+                line.Text = lastReadingData[34];
+                line = (TextBox)this.Controls.Find("line81old", true).First();
+                line.Text = lastReadingData[35];
+                line = (TextBox)this.Controls.Find("line82old", true).First();
+                line.Text = lastReadingData[36];
+                line = (TextBox)this.Controls.Find("line83old", true).First();
+                line.Text = lastReadingData[37];
+                line = (TextBox)this.Controls.Find("line84old", true).First();
+                line.Text = lastReadingData[38];
+                line = (TextBox)this.Controls.Find("line91old", true).First();
+                line.Text = lastReadingData[39];
+                line = (TextBox)this.Controls.Find("line92old", true).First();
+                line.Text = lastReadingData[40];
+                line = (TextBox)this.Controls.Find("line93old", true).First();
+                line.Text = lastReadingData[41];
+                line = (TextBox)this.Controls.Find("line94old", true).First();
+                line.Text = lastReadingData[42];
+                line = (TextBox)this.Controls.Find("line101old", true).First();
+                line.Text = lastReadingData[43];
+                line = (TextBox)this.Controls.Find("line102old", true).First();
+                line.Text = lastReadingData[44];
+                line = (TextBox)this.Controls.Find("line103old", true).First();
+                line.Text = lastReadingData[45];
+                line = (TextBox)this.Controls.Find("line104old", true).First();
+                line.Text = lastReadingData[46];
+                line = (TextBox)this.Controls.Find("line111old", true).First();
+                line.Text = lastReadingData[47];
+                line = (TextBox)this.Controls.Find("line112old", true).First();
+                line.Text = lastReadingData[48];
+                line = (TextBox)this.Controls.Find("line113old", true).First();
+                line.Text = lastReadingData[49];
+                line = (TextBox)this.Controls.Find("line114old", true).First();
+                line.Text = lastReadingData[50];
+                line = (TextBox)this.Controls.Find("line121old", true).First();
+                line.Text = lastReadingData[51];
+                line = (TextBox)this.Controls.Find("line122old", true).First();
+                line.Text = lastReadingData[52];
+                line = (TextBox)this.Controls.Find("line123old", true).First();
+                line.Text = lastReadingData[53];
+                line = (TextBox)this.Controls.Find("line124old", true).First();
+                line.Text = lastReadingData[54];
+                line = (TextBox)this.Controls.Find("line131old", true).First();
+                line.Text = lastReadingData[55];
+                line = (TextBox)this.Controls.Find("line132old", true).First();
+                line.Text = lastReadingData[56];
+                line = (TextBox)this.Controls.Find("line133old", true).First();
+                line.Text = lastReadingData[57];
+                line = (TextBox)this.Controls.Find("line134old", true).First();
+                line.Text = lastReadingData[58];
+
+                numericUpDown2.Value = int.Parse(lastReadingData[2]);
+
+                // clear current values
+                line = (TextBox)this.Controls.Find("line01current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line02current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line03current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line04current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line11current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line12current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line13current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line14current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line21current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line22current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line23current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line24current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line31current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line32current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line33current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line34current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line41current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line42current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line43current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line44current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line51current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line52current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line53current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line54current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line61current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line62current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line63current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line64current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line71current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line72current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line73current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line74current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line81current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line82current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line83current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line84current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line91current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line92current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line93current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line94current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line101current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line102current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line103current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line104current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line111current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line112current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line113current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line114current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line121current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line122current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line123current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line124current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line131current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line132current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line133current", true).First();
+                line.Text = "";
+                line = (TextBox)this.Controls.Find("line134current", true).First();
+                line.Text = "";
+            }
         }
 
         void copyGroupBox(int index, string gb_p_name, FlowLayoutPanel panel1, string extension = "")
@@ -848,7 +1156,7 @@ namespace Elictrical_Program
                 {
                     hourDiff = (int)numericUpDown2.Value;
                 }
-               
+
 
                 // normal lines
                 for (int col = 0; col < 40; col += 4)
@@ -863,7 +1171,7 @@ namespace Elictrical_Program
                     List<List<decimal>> result = calculate(old, current, consumption, hourDiff);
 
                     // line part1
-                    if(numericUpDown1.Value == 24)
+                    if (numericUpDown1.Value == 24)
                     {
                         int counter1 = 1;
                         for (int i = 0; i < (int)numericUpDown2.Value; i++)
@@ -948,7 +1256,7 @@ namespace Elictrical_Program
                             counter6++;
                         }
                     }
-                       
+
 
                     // line part2
                     lineold = (TextBox)this.Controls.Find("line" + (col / 4) + 3 + "old", true).First();
@@ -1058,9 +1366,6 @@ namespace Elictrical_Program
                     // طرطوس
                     dataGridView1[59, i].Value = tartous;
                 }
-
-
-
 
             }
         }
@@ -1437,6 +1742,12 @@ namespace Elictrical_Program
         private void button3_Click(object sender, EventArgs e)
         {
             string date = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
+            string[] lastReadingData = getLastReadingData();
+            int except_hour = 0;
+            if (lastReadingData.Count() > 0)
+            {
+                except_hour = int.Parse(lastReadingData[2]);
+            }
 
             var result = MessageBox.Show(" هل انت متأكد من القيام بجلب البيانات من قاعدة البيانات بتاريخ " + date + "للتأكيد اضغط نعم", "تنبيه", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
             if (result == DialogResult.Yes)
@@ -1453,13 +1764,17 @@ namespace Elictrical_Program
                 DataSet ds = DBFunctions.fillDataSet(qrt);
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    for (int j = 0; j < 61; j++)
+                    if (except_hour > 0 && i < except_hour)
                     {
-                        int temp;
-                        int.TryParse(ds.Tables[0].Rows[i].ItemArray[j + 2].ToString(), out temp);
-                        dataGridView1[j, i].Value = temp;
+                        for (int j = 0; j < 61; j++)
+                        {
+                            int temp;
+                            int.TryParse(ds.Tables[0].Rows[i].ItemArray[j + 2].ToString(), out temp);
+                            dataGridView1[j, i].Value = temp;
+                        }
                     }
                 }
+                setInitialValuesForStartInputs(lastReadingData);
                 MessageBox.Show("تم تحميل البيانات بنجاح");
             }
 
@@ -1566,15 +1881,19 @@ namespace Elictrical_Program
                         {
                             error_happen = true;
                         }
-                       
+
                     }
 
                 }
 
-                if(error_happen)
+                if (error_happen)
                     MessageBox.Show("الرجاء التحقق من المدخلات");
                 else
+                {
+                    string[] lastReadingData = getLastReadingData();
+                    setInitialValuesForStartInputs(lastReadingData);
                     MessageBox.Show("تم تخزين البيانات بنجاح");
+                }
             }
         }
 
