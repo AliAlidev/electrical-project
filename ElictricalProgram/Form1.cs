@@ -1453,7 +1453,7 @@ namespace Elictrical_Program
                 List<List<decimal>> newValues = new List<List<decimal>>();
                 List<decimal> tmp = new List<decimal>();
                 tmp.Add(consumption);
-                tmp.Add(current);
+                tmp.Add(old);
                 newValues.Add(tmp);
                 return newValues;
             }
@@ -1549,20 +1549,17 @@ namespace Elictrical_Program
                 // transformers start from line 12 
                 int hourDiff = (int)(numericUpDown2.Value - numericUpDown1.Value);
 
-                //if (hourDiff < 0)
-                //    MessageBox.Show("ساعة البدء يجب أن تكون أكبر أو تساوي ساعة الانتهاء");
-                //else
-                //{
+                if (hourDiff < 0)
+                {
+                    MessageBox.Show("ساعة البدء يجب أن تكون أكبر أو تساوي ساعة الانتهاء");
+                    goto end0;
+                }
 
-                //}
-
-                //if (numericUpDown1.Value == 24)
-                //{
-                //    hourDiff = (int)numericUpDown2.Value;
-                //}
-
-                //if (hourDiff == 0)
-                //    hourDiff = 1;
+                if(numericUpDown2.Value >24 || numericUpDown1.Value <0)
+                {
+                    MessageBox.Show("يجب اختيار قيم صحيحة لساعة البدء والانتهاء");
+                    goto end0;
+                }
 
                 // normal lines
                 for (int col = 0; col < 40; col += 4)
@@ -1577,18 +1574,7 @@ namespace Elictrical_Program
                     List<List<decimal>> result = calculate(old, current, consumption, hourDiff);
 
                     // line part1
-                    if (numericUpDown1.Value == 24)
-                    {
-                        int counter1 = 1;
-                        for (int i = 0; i < (int)numericUpDown2.Value; i++)
-                        {
-                            dataGridView1[col + 1, i].Value = result[counter1][1];
-                            dataGridView1[col + 2, i].Value = result[counter1][0];
-                            counter1++;
-                        }
-                    }
-                    else
-                    {
+
                         if ((int)numericUpDown1.Value == 0)
                         {
                             int counter2 = 1;
@@ -1609,7 +1595,6 @@ namespace Elictrical_Program
                                 counter2++;
                             }
                         }
-                    }
 
                     // line part2
                     lineold = (TextBox)this.Controls.Find("line" + (col / 4) + 3 + "old", true).First();
@@ -1620,18 +1605,6 @@ namespace Elictrical_Program
                     int.TryParse(lineconsumption.Text, out consumption);
                     result = calculate(old, current, consumption, hourDiff);
 
-                    if (numericUpDown1.Value == 24)
-                    {
-                        int counter3 = 1;
-                        for (int i = 0; i < (int)numericUpDown2.Value; i++)
-                        {
-                            dataGridView1[col + 3, i].Value = result[counter3][1];
-                            dataGridView1[col + 4, i].Value = result[counter3][0];
-                            counter3++;
-                        }
-                    }
-                    else
-                    {
                         if ((int)numericUpDown1.Value == 0)
                         {
                             int counter4 = 1;
@@ -1652,7 +1625,6 @@ namespace Elictrical_Program
                                 counter4++;
                             }
                         }
-                    }
                 }
 
                 // transformer lines
@@ -1668,18 +1640,6 @@ namespace Elictrical_Program
                     List<List<decimal>> resultTransformer = calculateTransform(old, current, consumption, hourDiff);
 
                     // line part1
-                    if (numericUpDown1.Value == 24)
-                    {
-                        int counter5 = 1;
-                        for (int i = 0; i < (int)numericUpDown2.Value; i++)
-                        {
-                            dataGridView1[col + 1, i].Value = resultTransformer[counter5][2];
-                            dataGridView1[col + 2, i].Value = resultTransformer[counter5][0];
-                            counter5++;
-                        }
-                    }
-                    else
-                    {
                         if ((int)numericUpDown1.Value == 0)
                         {
                             int counter6 = 1;
@@ -1700,7 +1660,6 @@ namespace Elictrical_Program
                                 counter6++;
                             }
                         }
-                    }
 
 
                     // line part2
@@ -1712,18 +1671,6 @@ namespace Elictrical_Program
                     int.TryParse(lineconsumption.Text, out consumption);
                     resultTransformer = calculateTransform(old, current, consumption, hourDiff);
 
-                    if (numericUpDown1.Value == 24)
-                    {
-                        int counter8 = 0;
-                        for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
-                        {
-                            dataGridView1[col + 3, i].Value = resultTransformer[counter8][2];
-                            dataGridView1[col + 4, i].Value = resultTransformer[counter8][0];
-                            counter8++;
-                        }
-                    }
-                    else
-                    {
                         if ((int)numericUpDown1.Value == 0)
                         {
                             int counter9 = 1;
@@ -1744,7 +1691,6 @@ namespace Elictrical_Program
                                 counter9++;
                             }
                         }
-                    }
                 }
 
                 // north line
@@ -1758,18 +1704,7 @@ namespace Elictrical_Program
                 List<List<decimal>> north_result = calculate(north_old, north_current, north_consumption, hourDiff);
 
                 // line part1
-                if (numericUpDown1.Value == 24)
-                {
-                    int counter1 = 1;
-                    for (int i = 0; i < (int)numericUpDown2.Value; i++)
-                    {
-                        dataGridView1[52 + 1, i].Value = north_result[counter1][1];
-                        dataGridView1[52 + 2, i].Value = north_result[counter1][0];
-                        counter1++;
-                    }
-                }
-                else
-                {
+
                     if ((int)numericUpDown1.Value == 0)
                     {
                         int counter2 = 1;
@@ -1790,7 +1725,6 @@ namespace Elictrical_Program
                             counter2++;
                         }
                     }
-                }
 
                 // line part2
                 north_lineold = (TextBox)this.Controls.Find("line" + (52 / 4) + 3 + "old", true).First();
@@ -1801,18 +1735,7 @@ namespace Elictrical_Program
                 int.TryParse(north_lineconsumption.Text, out north_consumption);
                 north_result = calculate(north_old, north_current, north_consumption, hourDiff);
 
-                if (numericUpDown1.Value == 24)
-                {
-                    int counter3 = 1;
-                    for (int i = 0; i < (int)numericUpDown2.Value; i++)
-                    {
-                        dataGridView1[52 + 3, i].Value = north_result[counter3][1];
-                        dataGridView1[52 + 4, i].Value = north_result[counter3][0];
-                        counter3++;
-                    }
-                }
-                else
-                {
+
                     if ((int)numericUpDown1.Value == 0)
                     {
                         int counter4 = 1;
@@ -1833,7 +1756,6 @@ namespace Elictrical_Program
                             counter4++;
                         }
                     }
-                }
 
                 // tartous lines
                 // arrival1 start at 17
@@ -1870,6 +1792,7 @@ namespace Elictrical_Program
                 }
 
             }
+            end0:;
         }
 
         private void releaseObject(object obj)
