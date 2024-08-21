@@ -2219,6 +2219,19 @@ namespace Elictrical_Program
             var result = MessageBox.Show("هل انت متأكد من القيام بالحفظ في قاعدة البيانات بتاريخ " + date + " للتاكيد اضغط نعم", "تنبيه", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
             if (result == DialogResult.Yes)
             {
+                int hourDiff = (int)(numericUpDown2.Value - numericUpDown1.Value);
+                if (hourDiff < 0)
+                {
+                    MessageBox.Show("ساعة البدء يجب أن تكون أكبر أو تساوي ساعة الانتهاء");
+                    goto end0;
+                }
+
+                if (numericUpDown2.Value > 24 || numericUpDown1.Value < 0)
+                {
+                    MessageBox.Show("يجب اختيار قيم صحيحة لساعة البدء والانتهاء");
+                    goto end0;
+                }
+
                 bool error_happen = false;
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
@@ -2327,6 +2340,7 @@ namespace Elictrical_Program
                     setInitialValuesForStartInputs(lastReadingData);
                     MessageBox.Show("تم تخزين البيانات بنجاح");
                 }
+            end0:;
             }
         }
 
