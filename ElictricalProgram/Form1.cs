@@ -28,10 +28,17 @@ namespace Elictrical_Program
         private void take_database_backup()
         {
             string file_name = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
+            string directory_path = Application.StartupPath + "\\backups\\" + file_name;
+            if (!Directory.Exists(directory_path))
+            {
+                Directory.CreateDirectory(directory_path);
+            }
+
             string fileToCopy = Application.StartupPath + "\\db";
-            string destinationFile = Application.StartupPath + "\\backups\\" + file_name + ".back";
-            if (!File.Exists(destinationFile))
-                File.Copy(fileToCopy, destinationFile);
+            string destinationFile = directory_path + "\\" + file_name + ".back";
+            string random_string = DateTime.Now.Ticks.ToString();
+            destinationFile = destinationFile + "." + random_string;
+            File.Copy(fileToCopy, destinationFile);
         }
 
         private void check_required_directories()
@@ -116,6 +123,7 @@ namespace Elictrical_Program
             {
                 button6.Visible = true;
                 button7.Visible = true;
+                button8.Visible = true;
                 dateTimePicker1.Enabled = true;
             }
 
@@ -218,6 +226,8 @@ namespace Elictrical_Program
                 {
                     for (int j = 0; j < 61; j++)
                     {
+                        if (j == 0)
+                            j = 1;
                         int temp;
                         int.TryParse(ds.Tables[0].Rows[i].ItemArray[j + 2].ToString(), out temp);
                         dataGridView1[j, i].Value = temp;
@@ -1125,7 +1135,8 @@ namespace Elictrical_Program
             for (int i = 0; i < rowsCount; i++)
             {
                 dr = tableName.NewRow();
-                dr[0] = (i + 1);
+                if (i < rowsCount - 1)
+                    dr[0] = (i + 1);
                 tableName.Rows.Add(dr);
             }
 
@@ -1141,8 +1152,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[3].HeaderText = "بانياس1 \n\n استقبال";
             dataGridView1.Columns[4].HeaderText = "استهلاك";
             dataGridView1.Columns[4].Width = 70;
-            dataGridView1.Columns[1].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[2].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[1].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[2].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[3].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[4].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             //////////////////////////////////////////// banias2 ////////////////////////////////////////////
@@ -1156,8 +1167,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[8].Width = 70;
             dataGridView1.Columns[5].DefaultCellStyle.BackColor = Color.AliceBlue;
             dataGridView1.Columns[6].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[7].DefaultCellStyle.BackColor = Color.LightSkyBlue;
-            dataGridView1.Columns[8].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[7].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[8].DefaultCellStyle.BackColor = Color.AliceBlue;
             //////////////////////////////////////////// semerian1 ////////////////////////////////////////////
             dataGridView1.Columns[9].Width = 80;
             dataGridView1.Columns[9].HeaderText = "سمريان1 \n\n ارسال";
@@ -1167,8 +1178,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[11].HeaderText = "سمريان1 \n\n استقبال";
             dataGridView1.Columns[12].HeaderText = "استهلاك";
             dataGridView1.Columns[12].Width = 70;
-            dataGridView1.Columns[9].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[10].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[9].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[10].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[11].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[12].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             //////////////////////////////////////////// semerian2 ////////////////////////////////////////////
@@ -1182,8 +1193,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[16].Width = 70;
             dataGridView1.Columns[13].DefaultCellStyle.BackColor = Color.AliceBlue;
             dataGridView1.Columns[14].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[15].DefaultCellStyle.BackColor = Color.LightSkyBlue;
-            dataGridView1.Columns[16].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[15].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[16].DefaultCellStyle.BackColor = Color.AliceBlue;
             //////////////////////////////////////////// arrival1 ////////////////////////////////////////////
             dataGridView1.Columns[17].Width = 80;
             dataGridView1.Columns[17].HeaderText = "وصول1 \n\n ارسال";
@@ -1193,8 +1204,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[19].HeaderText = "وصول1 \n\n استقبال";
             dataGridView1.Columns[20].HeaderText = "استهلاك";
             dataGridView1.Columns[20].Width = 70;
-            dataGridView1.Columns[17].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[18].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[17].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[18].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[19].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[20].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             //////////////////////////////////////////// arrival2 ////////////////////////////////////////////
@@ -1208,8 +1219,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[24].Width = 70;
             dataGridView1.Columns[21].DefaultCellStyle.BackColor = Color.AliceBlue;
             dataGridView1.Columns[22].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[23].DefaultCellStyle.BackColor = Color.LightSkyBlue;
-            dataGridView1.Columns[24].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[23].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[24].DefaultCellStyle.BackColor = Color.AliceBlue;
             //////////////////////////////////////////// arrival3 ////////////////////////////////////////////
             dataGridView1.Columns[25].Width = 80;
             dataGridView1.Columns[25].HeaderText = "وصول3 \n\n ارسال";
@@ -1219,8 +1230,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[27].HeaderText = "وصول3 \n\n استقبال";
             dataGridView1.Columns[28].HeaderText = "استهلاك";
             dataGridView1.Columns[28].Width = 70;
-            dataGridView1.Columns[25].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[26].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[25].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[26].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[27].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[28].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             //////////////////////////////////////////// amreet ////////////////////////////////////////////
@@ -1234,8 +1245,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[32].Width = 70;
             dataGridView1.Columns[29].DefaultCellStyle.BackColor = Color.AliceBlue;
             dataGridView1.Columns[30].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[31].DefaultCellStyle.BackColor = Color.LightSkyBlue;
-            dataGridView1.Columns[32].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[31].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[32].DefaultCellStyle.BackColor = Color.AliceBlue;
             //////////////////////////////////////////// esmant ////////////////////////////////////////////
             dataGridView1.Columns[33].Width = 80;
             dataGridView1.Columns[33].HeaderText = "اسمنت \n\n ارسال";
@@ -1245,8 +1256,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[35].HeaderText = "اسمنت \n\n استقبال";
             dataGridView1.Columns[36].HeaderText = "استهلاك";
             dataGridView1.Columns[36].Width = 70;
-            dataGridView1.Columns[33].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[34].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[33].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[34].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[35].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[36].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             //////////////////////////////////////////// company ////////////////////////////////////////////
@@ -1260,8 +1271,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[40].Width = 70;
             dataGridView1.Columns[37].DefaultCellStyle.BackColor = Color.AliceBlue;
             dataGridView1.Columns[38].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[39].DefaultCellStyle.BackColor = Color.LightSkyBlue;
-            dataGridView1.Columns[40].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[39].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[40].DefaultCellStyle.BackColor = Color.AliceBlue;
             //////////////////////////////////////////// transformer1 ////////////////////////////////////////////
             dataGridView1.Columns[41].Width = 80;
             dataGridView1.Columns[41].HeaderText = "محولة1 \n\n ارسال";
@@ -1271,8 +1282,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[43].HeaderText = "محولة1 \n\n استقبال";
             dataGridView1.Columns[44].HeaderText = "استهلاك";
             dataGridView1.Columns[44].Width = 70;
-            dataGridView1.Columns[41].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[42].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[41].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[42].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[43].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[44].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             //////////////////////////////////////////// transformer2 ////////////////////////////////////////////
@@ -1286,8 +1297,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[48].Width = 70;
             dataGridView1.Columns[45].DefaultCellStyle.BackColor = Color.AliceBlue;
             dataGridView1.Columns[46].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[47].DefaultCellStyle.BackColor = Color.LightSkyBlue;
-            dataGridView1.Columns[48].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[47].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[48].DefaultCellStyle.BackColor = Color.AliceBlue;
             //////////////////////////////////////////// transformer3 ////////////////////////////////////////////
             dataGridView1.Columns[49].Width = 80;
             dataGridView1.Columns[49].HeaderText = "محولة3 \n\n ارسال";
@@ -1297,8 +1308,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[51].HeaderText = "محولة3 \n\n استقبال";
             dataGridView1.Columns[52].HeaderText = "استهلاك";
             dataGridView1.Columns[52].Width = 70;
-            dataGridView1.Columns[49].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[50].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[49].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[50].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[51].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[52].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             //////////////////////////////////////////// north ////////////////////////////////////////////
@@ -1312,8 +1323,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[56].Width = 70;
             dataGridView1.Columns[53].DefaultCellStyle.BackColor = Color.AliceBlue;
             dataGridView1.Columns[54].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[55].DefaultCellStyle.BackColor = Color.LightSkyBlue;
-            dataGridView1.Columns[56].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[55].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[56].DefaultCellStyle.BackColor = Color.AliceBlue;
             //////////////////////////////////////////// tartous ////////////////////////////////////////////
             dataGridView1.Columns[57].Width = 80;
             dataGridView1.Columns[57].HeaderText = "بانياس";
@@ -1323,8 +1334,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[59].HeaderText = "طرطوس";
             dataGridView1.Columns[60].HeaderText = "";
             dataGridView1.Columns[60].Width = 70;
-            dataGridView1.Columns[57].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[58].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[57].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[58].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[59].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             dataGridView1.Columns[60].DefaultCellStyle.BackColor = Color.LightSkyBlue;
             //////////////////////////////////////////// total ////////////////////////////////////////////
@@ -1338,8 +1349,8 @@ namespace Elictrical_Program
             dataGridView1.Columns[64].Width = 70;
             dataGridView1.Columns[61].DefaultCellStyle.BackColor = Color.AliceBlue;
             dataGridView1.Columns[62].DefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView1.Columns[63].DefaultCellStyle.BackColor = Color.LightSkyBlue;
-            dataGridView1.Columns[64].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            dataGridView1.Columns[63].DefaultCellStyle.BackColor = Color.AliceBlue;
+            dataGridView1.Columns[64].DefaultCellStyle.BackColor = Color.AliceBlue;
         }
 
         private void flowLayoutPanel1_Scroll(object sender, ScrollEventArgs e)
@@ -1545,11 +1556,13 @@ namespace Elictrical_Program
 
                 //}
 
-                if (numericUpDown1.Value == 24)
-                {
-                    hourDiff = (int)numericUpDown2.Value;
-                }
+                //if (numericUpDown1.Value == 24)
+                //{
+                //    hourDiff = (int)numericUpDown2.Value;
+                //}
 
+                //if (hourDiff == 0)
+                //    hourDiff = 1;
 
                 // normal lines
                 for (int col = 0; col < 40; col += 4)
@@ -2249,6 +2262,8 @@ namespace Elictrical_Program
 
         void loadDataFromSelectedDateToGridView(int except_hour = 25, string[] lastReadingData = null)
         {
+            if (except_hour == 24)
+                except_hour = 25;
             string date = dateTimePicker1.Value.Date.ToString("yyyy-MM-dd");
             string qrt = "";
             if (DBFunctions.user_role == 0)
@@ -2292,7 +2307,7 @@ namespace Elictrical_Program
                         transformer2_send, transformer2_send_consumption, transformer3_send, transformer3_send_consumption, north_send, north_send_consumption,
                         banias, semerian, tartous, total;
 
-                    if (row.Index < 25)
+                    if (row.Index < 24)
                     {
                         try
                         {
