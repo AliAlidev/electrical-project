@@ -52,18 +52,8 @@ namespace Elictrical_Program
                 Directory.CreateDirectory(destinationDirectory);
         }
 
-        private void Form1_Load(object sender, System.EventArgs e)
+        private void startUpFunction()
         {
-            check_required_directories();
-            take_database_backup();
-            Login lg = new Login();
-            lg.ShowDialog();
-            if (!DBFunctions.is_valid_user)
-            {
-                Application.Exit();
-                goto program_end;
-            }
-
             DBFunctions.now = DateTime.Now.ToString("yyyy-MM-dd");
             linkLabel1.Visible = false;
             copyGroupBox(0, "بانياس1", flowLayoutPanel1, "old");
@@ -130,6 +120,37 @@ namespace Elictrical_Program
             label4.Text = DBFunctions.user_name;
 
         program_end:;
+        }
+
+        private void Form1_Load(object sender, System.EventArgs e)
+        {
+            check_required_directories();
+            take_database_backup();
+            Login lg = new Login();
+            lg.ShowDialog();
+            if (!DBFunctions.is_valid_user)
+            {
+                Application.Exit();
+                goto program_end;
+            }
+
+            Thread th = new Thread(new ThreadStart(showLoader));
+            th.Start();
+            startUpFunction();
+            th.Abort();
+        program_end:;
+        }
+
+        private void showLoader()
+        {
+            try
+            {
+                Loader loader = new Loader();
+                loader.ShowDialog();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         string[] getLastReadingData()
@@ -1555,7 +1576,7 @@ namespace Elictrical_Program
                     goto end0;
                 }
 
-                if(numericUpDown2.Value >24 || numericUpDown1.Value <0)
+                if (numericUpDown2.Value > 24 || numericUpDown1.Value < 0)
                 {
                     MessageBox.Show("يجب اختيار قيم صحيحة لساعة البدء والانتهاء");
                     goto end0;
@@ -1575,26 +1596,26 @@ namespace Elictrical_Program
 
                     // line part1
 
-                        if ((int)numericUpDown1.Value == 0)
+                    if ((int)numericUpDown1.Value == 0)
+                    {
+                        int counter2 = 1;
+                        for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
                         {
-                            int counter2 = 1;
-                            for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
-                            {
-                                dataGridView1[col + 1, i].Value = result[counter2][1];
-                                dataGridView1[col + 2, i].Value = result[counter2][0];
-                                counter2++;
-                            }
+                            dataGridView1[col + 1, i].Value = result[counter2][1];
+                            dataGridView1[col + 2, i].Value = result[counter2][0];
+                            counter2++;
                         }
-                        else
+                    }
+                    else
+                    {
+                        int counter2 = 0;
+                        for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
                         {
-                            int counter2 = 0;
-                            for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
-                            {
-                                dataGridView1[col + 1, i].Value = result[counter2][1];
-                                dataGridView1[col + 2, i].Value = result[counter2][0];
-                                counter2++;
-                            }
+                            dataGridView1[col + 1, i].Value = result[counter2][1];
+                            dataGridView1[col + 2, i].Value = result[counter2][0];
+                            counter2++;
                         }
+                    }
 
                     // line part2
                     lineold = (TextBox)this.Controls.Find("line" + (col / 4) + 3 + "old", true).First();
@@ -1605,26 +1626,26 @@ namespace Elictrical_Program
                     int.TryParse(lineconsumption.Text, out consumption);
                     result = calculate(old, current, consumption, hourDiff);
 
-                        if ((int)numericUpDown1.Value == 0)
+                    if ((int)numericUpDown1.Value == 0)
+                    {
+                        int counter4 = 1;
+                        for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
                         {
-                            int counter4 = 1;
-                            for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
-                            {
-                                dataGridView1[col + 3, i].Value = result[counter4][1];
-                                dataGridView1[col + 4, i].Value = result[counter4][0];
-                                counter4++;
-                            }
+                            dataGridView1[col + 3, i].Value = result[counter4][1];
+                            dataGridView1[col + 4, i].Value = result[counter4][0];
+                            counter4++;
                         }
-                        else
+                    }
+                    else
+                    {
+                        int counter4 = 0;
+                        for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
                         {
-                            int counter4 = 0;
-                            for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
-                            {
-                                dataGridView1[col + 3, i].Value = result[counter4][1];
-                                dataGridView1[col + 4, i].Value = result[counter4][0];
-                                counter4++;
-                            }
+                            dataGridView1[col + 3, i].Value = result[counter4][1];
+                            dataGridView1[col + 4, i].Value = result[counter4][0];
+                            counter4++;
                         }
+                    }
                 }
 
                 // transformer lines
@@ -1640,26 +1661,26 @@ namespace Elictrical_Program
                     List<List<decimal>> resultTransformer = calculateTransform(old, current, consumption, hourDiff);
 
                     // line part1
-                        if ((int)numericUpDown1.Value == 0)
+                    if ((int)numericUpDown1.Value == 0)
+                    {
+                        int counter6 = 1;
+                        for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
                         {
-                            int counter6 = 1;
-                            for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
-                            {
-                                dataGridView1[col + 1, i].Value = resultTransformer[counter6][2];
-                                dataGridView1[col + 2, i].Value = resultTransformer[counter6][0];
-                                counter6++;
-                            }
+                            dataGridView1[col + 1, i].Value = resultTransformer[counter6][2];
+                            dataGridView1[col + 2, i].Value = resultTransformer[counter6][0];
+                            counter6++;
                         }
-                        else
+                    }
+                    else
+                    {
+                        int counter6 = 0;
+                        for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
                         {
-                            int counter6 = 0;
-                            for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
-                            {
-                                dataGridView1[col + 1, i].Value = resultTransformer[counter6][2];
-                                dataGridView1[col + 2, i].Value = resultTransformer[counter6][0];
-                                counter6++;
-                            }
+                            dataGridView1[col + 1, i].Value = resultTransformer[counter6][2];
+                            dataGridView1[col + 2, i].Value = resultTransformer[counter6][0];
+                            counter6++;
                         }
+                    }
 
 
                     // line part2
@@ -1671,26 +1692,26 @@ namespace Elictrical_Program
                     int.TryParse(lineconsumption.Text, out consumption);
                     resultTransformer = calculateTransform(old, current, consumption, hourDiff);
 
-                        if ((int)numericUpDown1.Value == 0)
+                    if ((int)numericUpDown1.Value == 0)
+                    {
+                        int counter9 = 1;
+                        for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
                         {
-                            int counter9 = 1;
-                            for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
-                            {
-                                dataGridView1[col + 3, i].Value = resultTransformer[counter9][2];
-                                dataGridView1[col + 4, i].Value = resultTransformer[counter9][0];
-                                counter9++;
-                            }
+                            dataGridView1[col + 3, i].Value = resultTransformer[counter9][2];
+                            dataGridView1[col + 4, i].Value = resultTransformer[counter9][0];
+                            counter9++;
                         }
-                        else
+                    }
+                    else
+                    {
+                        int counter9 = 0;
+                        for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
                         {
-                            int counter9 = 0;
-                            for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
-                            {
-                                dataGridView1[col + 3, i].Value = resultTransformer[counter9][2];
-                                dataGridView1[col + 4, i].Value = resultTransformer[counter9][0];
-                                counter9++;
-                            }
+                            dataGridView1[col + 3, i].Value = resultTransformer[counter9][2];
+                            dataGridView1[col + 4, i].Value = resultTransformer[counter9][0];
+                            counter9++;
                         }
+                    }
                 }
 
                 // north line
@@ -1705,26 +1726,26 @@ namespace Elictrical_Program
 
                 // line part1
 
-                    if ((int)numericUpDown1.Value == 0)
+                if ((int)numericUpDown1.Value == 0)
+                {
+                    int counter2 = 1;
+                    for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
                     {
-                        int counter2 = 1;
-                        for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
-                        {
-                            dataGridView1[52 + 1, i].Value = north_result[counter2][1];
-                            dataGridView1[52 + 2, i].Value = north_result[counter2][0];
-                            counter2++;
-                        }
+                        dataGridView1[52 + 1, i].Value = north_result[counter2][1];
+                        dataGridView1[52 + 2, i].Value = north_result[counter2][0];
+                        counter2++;
                     }
-                    else
+                }
+                else
+                {
+                    int counter2 = 0;
+                    for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
                     {
-                        int counter2 = 0;
-                        for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
-                        {
-                            dataGridView1[52 + 1, i].Value = north_result[counter2][1];
-                            dataGridView1[52 + 2, i].Value = north_result[counter2][0];
-                            counter2++;
-                        }
+                        dataGridView1[52 + 1, i].Value = north_result[counter2][1];
+                        dataGridView1[52 + 2, i].Value = north_result[counter2][0];
+                        counter2++;
                     }
+                }
 
                 // line part2
                 north_lineold = (TextBox)this.Controls.Find("line" + (52 / 4) + 3 + "old", true).First();
@@ -1736,26 +1757,26 @@ namespace Elictrical_Program
                 north_result = calculate(north_old, north_current, north_consumption, hourDiff);
 
 
-                    if ((int)numericUpDown1.Value == 0)
+                if ((int)numericUpDown1.Value == 0)
+                {
+                    int counter4 = 1;
+                    for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
                     {
-                        int counter4 = 1;
-                        for (int i = (int)numericUpDown1.Value; i < (int)numericUpDown2.Value; i++)
-                        {
-                            dataGridView1[52 + 3, i].Value = north_result[counter4][1];
-                            dataGridView1[52 + 4, i].Value = north_result[counter4][0];
-                            counter4++;
-                        }
+                        dataGridView1[52 + 3, i].Value = north_result[counter4][1];
+                        dataGridView1[52 + 4, i].Value = north_result[counter4][0];
+                        counter4++;
                     }
-                    else
+                }
+                else
+                {
+                    int counter4 = 0;
+                    for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
                     {
-                        int counter4 = 0;
-                        for (int i = (int)numericUpDown1.Value - 1; i < (int)numericUpDown2.Value; i++)
-                        {
-                            dataGridView1[52 + 3, i].Value = north_result[counter4][1];
-                            dataGridView1[52 + 4, i].Value = north_result[counter4][0];
-                            counter4++;
-                        }
+                        dataGridView1[52 + 3, i].Value = north_result[counter4][1];
+                        dataGridView1[52 + 4, i].Value = north_result[counter4][0];
+                        counter4++;
                     }
+                }
 
                 // tartous lines
                 // arrival1 start at 17
@@ -1792,7 +1813,7 @@ namespace Elictrical_Program
                 }
 
             }
-            end0:;
+        end0:;
         }
 
         private void releaseObject(object obj)
@@ -2112,6 +2133,7 @@ namespace Elictrical_Program
             button2.Enabled = true;
             linkLabel1.Text = date + ".xlsx";
             linkLabel1.Visible = true;
+
             MessageBox.Show("تم الانتهاء من تصدير ملف الاكسل");
         }
 
@@ -2219,6 +2241,9 @@ namespace Elictrical_Program
             var result = MessageBox.Show("هل انت متأكد من القيام بالحفظ في قاعدة البيانات بتاريخ " + date + " للتاكيد اضغط نعم", "تنبيه", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
             if (result == DialogResult.Yes)
             {
+                Thread th = new Thread(new ThreadStart(showLoader));
+                th.Start();
+
                 int hourDiff = (int)(numericUpDown2.Value - numericUpDown1.Value);
                 if (hourDiff < 0)
                 {
@@ -2338,6 +2363,8 @@ namespace Elictrical_Program
                 {
                     string[] lastReadingData = getLastReadingData();
                     setInitialValuesForStartInputs(lastReadingData);
+                    th.Abort();
+                    this.Focus();
                     MessageBox.Show("تم تخزين البيانات بنجاح");
                 }
             end0:;
@@ -2399,8 +2426,11 @@ namespace Elictrical_Program
             }
         }
 
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        private void dateTimePicker1_CloseUp(object sender, EventArgs e)
         {
+            Thread th = new Thread(new ThreadStart(showLoader));
+            th.Start();
+
             createReadingTable();
             fillTableEmptyRows(readingTable, 25);
             string[] lastReadingData = getLastReadingData();
@@ -2411,6 +2441,8 @@ namespace Elictrical_Program
             }
             loadDataFromSelectedDateToGridView(except_hour);
             setInitialValuesForStartInputs(lastReadingData);
+
+            th.Abort();
         }
     }
 }
